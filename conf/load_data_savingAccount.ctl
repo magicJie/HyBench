@@ -1,0 +1,4 @@
+
+LOAD DATA INFILE '/home/ysdb/hybench/Data_1x/savingAccount.csv' FIELDS TERMINATED BY ',' INTO TABLE savingaccount(ACCOUNTID,USERID,BALANCE,ISBLOCKED,TIMESTAMP)
+
+

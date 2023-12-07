@@ -1,0 +1,4 @@
+		   
+LOAD DATA INFILE '/home/ysdb/hybench/Data_1x/transfer.csv' FIELDS TERMINATED BY ',' INTO TABLE  transfer(ID,SOURCEID,TARGETID,AMOUNT,TYPE,TIMESTAMP,FRESH_TS)  
+
+

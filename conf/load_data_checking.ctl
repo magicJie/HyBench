@@ -1,0 +1,4 @@
+
+LOAD DATA INFILE '/home/ysdb/hybench/Data_1x/checking.csv' FIELDS TERMINATED BY ',' INTO TABLE  checking(ID,SOURCEID,TARGETID,AMOUNT,TYPE,TIMESTAMP)
+
+
