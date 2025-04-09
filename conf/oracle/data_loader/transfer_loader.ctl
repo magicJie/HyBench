@@ -1,5 +1,5 @@
 load data
-infile '/opt/oracle/oradata/Data_1x/transfer.csv'
+infile '/home/oracle/Data_1x/transfer.csv'
 badfile '/home/oracle/bad.log'
 into table transfer
 fields terminated by ','

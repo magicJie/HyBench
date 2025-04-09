@@ -1,5 +1,5 @@
 load data
-infile '/opt/oracle/oradata/Data_1x/checkingAccount.csv'
+infile '/home/oracle/Data_1x/checkingAccount.csv'
 badfile '/home/oracle/bad.log'
 into table checkingaccount
 fields terminated by ','

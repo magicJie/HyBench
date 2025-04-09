@@ -1,20 +1,20 @@
 load data
-infile '/opt/oracle/oradata/Data_1x/company.csv'
+infile '/home/oracle/Data_1x/customer.csv'
 badfile '/home/oracle/bad.log'
-into table company
+into table customer
 fields terminated by ','
-(
+(               custID,
                 companyID,
+                gender,
                 name,
-                category,
-                staff_size,
-                loan_balance,
+                age,
                 phone,
                 province,
                 city,
-                SavingCredit,
-				        CheckingCredit,
-				        LoanCredit,
+                loan_balance,
+                s_credit,
+                c_credit,
+                b_credit,
                 Isblocked,
                 created_date timestamp "yyyy-mm-dd HH24:MI:SS.FF3",
                 last_update_timestamp timestamp "yyyy-mm-dd HH24:MI:SS.FF3"

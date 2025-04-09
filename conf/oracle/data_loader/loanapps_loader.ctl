@@ -1,5 +1,5 @@
 load data
-infile '/opt/oracle/oradata/Data_1x/loanApps.csv'
+infile '/home/oracle/Data_1x/loanApps.csv'
 badfile '/home/oracle/bad.log'
 into table loanapps
 fields terminated by ','

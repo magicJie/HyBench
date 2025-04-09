@@ -2,16 +2,14 @@ sf=1x
 
 db=A1
 classname=oracle.jdbc.OracleDriver
-username=@username
-password=@passwd
+username=hybench
+password=hybench
+url=jdbc:oracle:thin:@//192.168.122.1:1521/ORCLPDB1
 
-url=jdbc:oracle:thin:@localhost:1530/hybench_sf1x
-url_tp=jdbc:oracle:thin:@localhost:1530/hybench_sf1x
-url_ap=jdbc:oracle:thin:@localhost:1530/hybench_sf1x
-
+url_ap=jdbc:oracle:thin:@//192.168.122.1:1521/ORCLPDB1
 classname_ap=oracle.jdbc.OracleDriver
-username_ap=@username
-password_ap=@passwd
+username_ap=hybench
+password_ap=hybench
 
 at1_percent=35
 at2_percent=25
@@ -21,7 +19,7 @@ at5_percent=7
 at6_percent=3
 
 tpclient=1
-apclient=1
+apclient=5
 
 fresh_interval=20
 contention_num=100
