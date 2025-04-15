@@ -1,6 +1,6 @@
 sf=1x
 
-db=A1
+db=oracle
 classname=oracle.jdbc.OracleDriver
 username=hybench
 password=hybench
@@ -19,7 +19,7 @@ at5_percent=7
 at6_percent=3
 
 tpclient=1
-apclient=5
+apclient=1
 
 fresh_interval=20
 contention_num=100

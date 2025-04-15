@@ -511,6 +511,7 @@ sql = [
 "UPDATE SAVINGACCOUNT SET BALANCE = BALANCE + ? WHERE ACCOUNTID = ?;",
 "UPDATE LOANTRANS SET STATUS='lent', timestamp=? WHERE ID=?;"
 ]
+
 [TP-15]
 sql = [
 "SELECT id, APPLICANTID, duration, timestamp FROM LOANTRANS WHERE status='lent' order by timestamp limit 1;",
@@ -527,18 +528,30 @@ sql = [
 
 [TP-17]
 sql = [
-"select balance,isblocked from SAVINGACCOUNT where ACCOUNTID = ?",
-"select balance,isblocked from CHECKINGACCOUNT where ACCOUNTID =?",
-"UPDATE SAVINGACCOUNT SET BALANCE = BALANCE - ? WHERE ACCOUNTID = ?",
-"update CHECKINGACCOUNT set balance = balance + ? where ACCOUNTID = ?"
+"select balance,isblocked from SAVINGACCOUNT where ACCOUNTID = ?;",
+"select balance,isblocked from CHECKINGACCOUNT where ACCOUNTID =?;",
+"UPDATE SAVINGACCOUNT SET BALANCE = BALANCE - ? WHERE ACCOUNTID = ?;",
+"update CHECKINGACCOUNT set balance = balance + ? where ACCOUNTID = ?;;"
 ]
 
 [TP-18]
 sql = [
-"select balance,isblocked from SAVINGACCOUNT where accountid = ?",
-"select balance,isblocked from CHECKINGACCOUNT where accountid =?",
-"update CHECKINGACCOUNT set balance = balance - ? where accountid = ?",
-"UPDATE SAVINGACCOUNT SET BALANCE = BALANCE + ? WHERE ACCOUNTID = ?"
+"select balance,isblocked from SAVINGACCOUNT where accountid = ?;",
+"select balance,isblocked from CHECKINGACCOUNT where accountid =?;",
+"update CHECKINGACCOUNT set balance = balance - ? where accountid = ?;",
+"UPDATE SAVINGACCOUNT SET BALANCE = BALANCE + ? WHERE ACCOUNTID = ?;"
+]
+
+[AT-00]
+sql= [
+    "select custID from customer where companyID = ? order by created_date ASC limit 10;",
+    "delete from savingAccount where accountID = ?;"
+]
+
+[AT-0]
+sql= [
+    "SELECT custID FROM (select custID from customer where companyID = ? order by created_date) WHERE ROWNUM<=10";,
+    "update savingAccount set fresh_ts=current_timestamp where accountID = ?;"
 ]
 
 [AT-1]

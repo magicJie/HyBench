@@ -1,0 +1,21 @@
+load data
+infile '/home/dmdba/Data_1x/customer.csv'
+badfile '/home/dmdba/bad.log'
+into table customer
+fields terminated by ','
+(               custID,
+                companyID,
+                gender,
+                name,
+                age,
+                phone,
+                province,
+                city,
+                loan_balance,
+                s_credit,
+                c_credit,
+                b_credit,
+                Isblocked,
+                created_date date format 'yyyy-mm-dd HH24:MI:SS.FF3',
+                last_update_timestamp date format 'yyyy-mm-dd HH24:MI:SS.FF3'
+)

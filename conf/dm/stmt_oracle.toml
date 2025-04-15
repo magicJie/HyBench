@@ -447,65 +447,65 @@ WHERE ROWNUM <=1"""
 
 [TP-9]
 sql = [
-"SELECT BALANCE FROM SAVINGACCOUNT WHERE ACCOUNTID = ?",
-"UPDATE SAVINGACCOUNT SET BALANCE = BALANCE - ? WHERE ACCOUNTID = ?" ,
-"UPDATE SAVINGACCOUNT SET BALANCE = BALANCE + ? WHERE ACCOUNTID = ?",
-"INSERT INTO TRANSFER(ID,SOURCEID,TARGETID,AMOUNT,TYPE,TIMESTAMP) VALUES (TRANSFER_SEQ.NEXTVAL, ?,?,?,?,?)"
+    "SELECT BALANCE FROM SAVINGACCOUNT WHERE ACCOUNTID = ?",
+    "UPDATE SAVINGACCOUNT SET BALANCE = BALANCE - ? WHERE ACCOUNTID = ?" ,
+    "UPDATE SAVINGACCOUNT SET BALANCE = BALANCE + ? WHERE ACCOUNTID = ?",
+    "INSERT INTO TRANSFER(ID,SOURCEID,TARGETID,AMOUNT,TYPE,TIMESTAMP) VALUES (TRANSFER_SEQ.NEXTVAL, ?,?,?,?,?)"
 ]
 
 [TP-10]
 sql = [
-"SELECT custID FROM CUSTOMER WHERE COMPANYID = ?",
-"UPDATE SAVINGACCOUNT SET BALANCE = BALANCE - ? WHERE ACCOUNTID = ?",
-"UPDATE SAVINGACCOUNT SET BALANCE = BALANCE + ? WHERE ACCOUNTID = ?",
-"INSERT INTO TRANSFER(ID,SOURCEID,TARGETID,AMOUNT,TYPE,TIMESTAMP) VALUES (TRANSFER_SEQ.NEXTVAL, ?,?,?,?,?)"
+    "SELECT custID FROM CUSTOMER WHERE COMPANYID = ?",
+    "UPDATE SAVINGACCOUNT SET BALANCE = BALANCE - ? WHERE ACCOUNTID = ?",
+    "UPDATE SAVINGACCOUNT SET BALANCE = BALANCE + ? WHERE ACCOUNTID = ?",
+    "INSERT INTO TRANSFER(ID,SOURCEID,TARGETID,AMOUNT,TYPE,TIMESTAMP) VALUES (TRANSFER_SEQ.NEXTVAL, ?,?,?,?,?)"
 ]
 
 [TP-11]
 sql = [
-"SELECT BALANCE FROM CHECKINGACCOUNT WHERE ACCOUNTID = ?",
-"UPDATE CHECKINGACCOUNT SET BALANCE = BALANCE - ? WHERE ACCOUNTID = ?",
-"UPDATE CHECKINGACCOUNT SET BALANCE = BALANCE + ? WHERE ACCOUNTID = ?",
-"INSERT INTO CHECKING(ID,SOURCEID,TARGETID,AMOUNT,TYPE,TIMESTAMP) VALUES (CHECKING_SEQ.NEXTVAL,?,?,?,?,?)"
+    "SELECT BALANCE FROM CHECKINGACCOUNT WHERE ACCOUNTID = ?",
+    "UPDATE CHECKINGACCOUNT SET BALANCE = BALANCE - ? WHERE ACCOUNTID = ?",
+    "UPDATE CHECKINGACCOUNT SET BALANCE = BALANCE + ? WHERE ACCOUNTID = ?",
+    "INSERT INTO CHECKING(ID,SOURCEID,TARGETID,AMOUNT,TYPE,TIMESTAMP) VALUES (CHECKING_SEQ.NEXTVAL,?,?,?,?,?)"
 ]
 
 [TP-12]
 sql = [
-"SELECT loan_balance FROM customer WHERE custID = ?",
-"UPDATE customer SET loan_balance = loan_balance - ? where custID = ?",
-"SELECT loan_balance FROM company WHERE companyID = ?",
-"UPDATE company SET loan_balance = loan_balance - ? where companyID = ?",
-"INSERT INTO LOANAPPS(ID, APPLICANTID, AMOUNT, DURATION, STATUS, TIMESTAMP) VALUES (LOANAPPS_SEQ.NEXTVAL,?,?,?,?,?)"
+    "SELECT loan_balance FROM customer WHERE custID = ?",
+    "UPDATE customer SET loan_balance = loan_balance - ? where custID = ?",
+    "SELECT loan_balance FROM company WHERE companyID = ?",
+    "UPDATE company SET loan_balance = loan_balance - ? where companyID = ?",
+    "INSERT INTO LOANAPPS(ID, APPLICANTID, AMOUNT, DURATION, STATUS, TIMESTAMP) VALUES (LOANAPPS_SEQ.NEXTVAL,?,?,?,?,?)"
 ]
 
 [TP-13]
 sql = [
-"SELECT * FROM (SELECT ID, APPLICANTID, AMOUNT, DURATION, TIMESTAMP FROM LOANAPPS WHERE status='under_review' order by timestamp) WHERE ROWNUM <=1",
-"INSERT INTO LOANTRANS(ID, APPLICANTID, APPID, AMOUNT, STATUS, TIMESTAMP, DURATION, CONTRACT_TIMESTAMP, DELINQUENCY)VALUES(LOANTRANS_SEQ.NEXTVAL,?,?,?,?,?,?,?,?)",
-"UPDATE CUSTOMER SET loan_balance = loan_balance + ? where custID = ?",
-"UPDATE COMPANY SET loan_balance = loan_balance + ? where companyID = ?",
-"UPDATE LOANAPPS SET STATUS=? WHERE ID=?"
+    "SELECT * FROM (SELECT ID, APPLICANTID, AMOUNT, DURATION, TIMESTAMP FROM LOANAPPS WHERE status='under_review' order by timestamp) WHERE ROWNUM <=1",
+    "INSERT INTO LOANTRANS(ID, APPLICANTID, APPID, AMOUNT, STATUS, TIMESTAMP, DURATION, CONTRACT_TIMESTAMP, DELINQUENCY)VALUES(LOANTRANS_SEQ.NEXTVAL,?,?,?,?,?,?,?,?)",
+    "UPDATE CUSTOMER SET loan_balance = loan_balance + ? where custID = ?",
+    "UPDATE COMPANY SET loan_balance = loan_balance + ? where companyID = ?",
+    "UPDATE LOANAPPS SET STATUS=? WHERE ID=?"
 ]
 
 [TP-14]
 sql = [
-"SELECT * FROM (SELECT id, APPLICANTID, AMOUNT, contract_timestamp FROM LOANTRANS WHERE status='accept' order by timestamp) WHERE ROWNUM <=1",
-"UPDATE SAVINGACCOUNT SET BALANCE = BALANCE + ? WHERE ACCOUNTID = ?",
-"UPDATE LOANTRANS SET STATUS='lent', timestamp=? WHERE ID=?"
+    "SELECT * FROM (SELECT id, APPLICANTID, AMOUNT, contract_timestamp FROM LOANTRANS WHERE status='accept' order by timestamp) WHERE ROWNUM <=1",
+    "UPDATE SAVINGACCOUNT SET BALANCE = BALANCE + ? WHERE ACCOUNTID = ?",
+    "UPDATE LOANTRANS SET STATUS='lent', timestamp=? WHERE ID=?"
 ]
 
 [TP-15]
 sql = [
-"SELECT * FROM (SELECT id, APPLICANTID, duration, contract_timestamp FROM LOANTRANS WHERE status='lent' order by timestamp) WHERE ROWNUM <=1",
-"UPDATE LOANTRANS SET delinquency=1, timestamp=? WHERE id=?"
+    "SELECT * FROM (SELECT id, APPLICANTID, duration, contract_timestamp FROM LOANTRANS WHERE status='lent' order by timestamp) WHERE ROWNUM <=1",
+    "UPDATE LOANTRANS SET delinquency=1, timestamp=? WHERE id=?"
 ]
 
 [TP-16]
 sql = [
-"SELECT * FROM (SELECT id, APPLICANTID, duration, amount, timestamp FROM LOANTRANS WHERE status='lent' order by timestamp) WHERE ROWNUM <=1",
-"SELECT balance from SAVINGACCOUNT WHERE ACCOUNTID = ?",
-"UPDATE SAVINGACCOUNT SET BALANCE = BALANCE - ? WHERE ACCOUNTID = ?",
-"UPDATE LOANTRANS SET status='repaid',timestamp=? WHERE id=?"
+    "SELECT * FROM (SELECT id, APPLICANTID, duration, amount, timestamp FROM LOANTRANS WHERE status='lent' order by timestamp) WHERE ROWNUM <=1",
+    "SELECT balance from SAVINGACCOUNT WHERE ACCOUNTID = ?",
+    "UPDATE SAVINGACCOUNT SET BALANCE = BALANCE - ? WHERE ACCOUNTID = ?",
+    "UPDATE LOANTRANS SET status='repaid',timestamp=? WHERE id=?"
 ]
 
 [TP-17]
@@ -538,37 +538,37 @@ sql= [
 
 [AT-1]
 sql = [
-"SELECT isblocked,balance FROM savingAccount WHERE accountID = ?",
-"select count(*) from transfer t, savingaccount s where t.targetid=? and s.isblocked=1 and t.sourceid=s.accountid",
-"UPDATE savingAccount SET balance = balance - ? where accountID = ?",
-"UPDATE savingAccount SET balance = balance + ? where accountID = ?",
-"INSERT INTO TRANSFER(ID,SOURCEID,TARGETID,AMOUNT,TYPE,TIMESTAMP) VALUES (TRANSFER_SEQ.NEXTVAL, ?,?,?,?,?)"
+    "SELECT isblocked,balance FROM savingAccount WHERE accountID = ?",
+    "select count(*) from transfer t, savingaccount s where t.targetid=? and s.isblocked=1 and t.sourceid=s.accountid",
+    "UPDATE savingAccount SET balance = balance - ? where accountID = ?",
+    "UPDATE savingAccount SET balance = balance + ? where accountID = ?",
+    "INSERT INTO TRANSFER(ID,SOURCEID,TARGETID,AMOUNT,TYPE,TIMESTAMP) VALUES (TRANSFER_SEQ.NEXTVAL, ?,?,?,?,?)"
 ]
 
 [AT-2]
 sql = [
-"SELECT isblocked,balance FROM CHECKINGACCOUNT WHERE accountID = ?",
-"select count(*) from checking ch, checkingAccount ca where ch.sourceid=? and ca.isblocked=1 and ch.targetid=ca.accountid",
-"UPDATE checkingAccount SET balance = balance - ? where accountID = ?",
-"UPDATE checkingAccount SET balance = balance + ? where accountID = ?",
-"INSERT INTO CHECKING(ID,SOURCEID,TARGETID,AMOUNT,TYPE,TIMESTAMP) VALUES (CHECKING_SEQ.NEXTVAL,?,?,?,?,?)"
+    "SELECT isblocked,balance FROM CHECKINGACCOUNT WHERE accountID = ?",
+    "select count(*) from checking ch, checkingAccount ca where ch.sourceid=? and ca.isblocked=1 and ch.targetid=ca.accountid",
+    "UPDATE checkingAccount SET balance = balance - ? where accountID = ?",
+    "UPDATE checkingAccount SET balance = balance + ? where accountID = ?",
+    "INSERT INTO CHECKING(ID,SOURCEID,TARGETID,AMOUNT,TYPE,TIMESTAMP) VALUES (CHECKING_SEQ.NEXTVAL,?,?,?,?,?)"
 ]
 
 [AT-3]
 sql = [
-"SELECT isblocked FROM SavingAccount WHERE accountID = ?",
-"""Select (inbound.t_amount-outbound.t_amount) as t_amount  from
-	(select sa.accountid as sid, sum(t.amount) as t_amount from savingaccount sa, transfer t
-			where sa.accountid=? and sa.accountid=t.sourceid
-			group by accountid
-	) outbound,
-	(select sa.accountid as sid, sum(t.amount) as t_amount from savingaccount sa, transfer t
-			where sa.accountid=? and sa.accountid=t.targetid
-			group by accountid
-	) inbound""",
-"INSERT INTO LOANTRANS(ID, APPLICANTID, APPID, AMOUNT, STATUS, TIMESTAMP, DURATION, CONTRACT_TIMESTAMP, DELINQUENCY)VALUES(LOANTRANS_SEQ.NEXTVAL,?,?,?,?,?,?,?,?)",
-"UPDATE LoanApps SET status = 'accept',timestamp=? where id = ?",
-"UPDATE LoanApps SET status = 'reject',timestamp=? where id = ?"
+    "SELECT isblocked FROM SavingAccount WHERE accountID = ?",
+    """Select (inbound.t_amount-outbound.t_amount) as t_amount  from
+        (select sa.accountid as sid, sum(t.amount) as t_amount from savingaccount sa, transfer t
+                where sa.accountid=? and sa.accountid=t.sourceid
+                group by accountid
+        ) outbound,
+        (select sa.accountid as sid, sum(t.amount) as t_amount from savingaccount sa, transfer t
+                where sa.accountid=? and sa.accountid=t.targetid
+                group by accountid
+        ) inbound""",
+    "INSERT INTO LOANTRANS(ID, APPLICANTID, APPID, AMOUNT, STATUS, TIMESTAMP, DURATION, CONTRACT_TIMESTAMP, DELINQUENCY)VALUES(LOANTRANS_SEQ.NEXTVAL,?,?,?,?,?,?,?,?)",
+    "UPDATE LoanApps SET status = 'accept',timestamp=? where id = ?",
+    "UPDATE LoanApps SET status = 'reject',timestamp=? where id = ?"
 ]
 
 [AT-3.1]
@@ -576,9 +576,9 @@ sql = "SELECT * FROM (SELECT APPLICANTID, ID, TIMESTAMP, DURATION  FROM LOANAPPS
 
 [AT-4]
 sql = [
-"select count(distinct sa2.accountid) from transfer t, savingAccount sa1, savingAccount sa2, loantrans lt where sa1.accountid=? and sa1.accountid=t.targetid and t.sourceid=sa2.accountid and lt.applicantid=sa2.accountid and lt.status='accept'",
-"UPDATE savingAccount SET balance = balance + ? where accountID = ?",
-"UPDATE LoanTrans SET status = 'lent', contract_timestamp=? where id = ?"
+    "select count(distinct sa2.accountid) from transfer t, savingAccount sa1, savingAccount sa2, loantrans lt where sa1.accountid=? and sa1.accountid=t.targetid and t.sourceid=sa2.accountid and lt.applicantid=sa2.accountid and lt.status='accept'",
+    "UPDATE savingAccount SET balance = balance + ? where accountID = ?",
+    "UPDATE LoanTrans SET status = 'lent', contract_timestamp=? where id = ?"
 ]
 
 [AT-4.1]
@@ -586,8 +586,8 @@ sql = """SELECT * FROM (SELECT applicantid, amount, id, timestamp  FROM loantran
 
 [AT-5]
 sql = [
-"SELECT id FROM LoanTrans WHERE applicantID = ? and contract_timestamp+DURATION<TO_DATE('2024-01-01','yyyy-mm-dd') and status='lent'",
-"UPDATE LoanTrans SET delinquency=1 where id = ?"
+    "SELECT id FROM LoanTrans WHERE applicantID = ? and contract_timestamp+DURATION<TO_DATE('2024-01-01','yyyy-mm-dd') and status='lent'",
+    "UPDATE LoanTrans SET delinquency=1 where id = ?"
 ]
 
 [AT-5.1]
@@ -596,9 +596,9 @@ sql ="SELECT * FROM (SELECT applicantid FROM loantrans WHERE status='lent' order
 
 [AT-6]
 sql = [
-"SELECT count(applicantid) FROM LoanTrans WHERE delinquency=1 and contract_timestamp+DURATION+30<TO_DATE('2024-01-01','yyyy-mm-dd') and applicantid =?",
-"UPDATE savingaccount SET isBlocked = 1 where accountID = ?",
-"UPDATE checkingaccount SET isBlocked = 1 where accountID = ?"
+    "SELECT count(applicantid) FROM LoanTrans WHERE delinquency=1 and contract_timestamp+DURATION+30<TO_DATE('2024-01-01','yyyy-mm-dd') and applicantid =?",
+    "UPDATE savingaccount SET isBlocked = 1 where accountID = ?",
+    "UPDATE checkingaccount SET isBlocked = 1 where accountID = ?"
 ]
 
 [AT-6.1]

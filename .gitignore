@@ -2,3 +2,4 @@ target
 Data_*x
 hybench*.log
 lib/*
+out
