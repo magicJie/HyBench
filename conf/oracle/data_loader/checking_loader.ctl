@@ -1,6 +1,6 @@
 load data
-infile '/home/oracle/Data_1x/checking.csv'
-badfile '/home/oracle/bad.log'
+infile 'Data_1x/checking.csv'
+badfile 'bad.log'
 into table checking
 fields terminated by ','
 (

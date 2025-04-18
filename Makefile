@@ -12,9 +12,8 @@ OCI ?= "podman"
 
 # 测试数据规模
 SF := 1x
-
-print:
-	@echo "IMAGE_FULL_NAME is $(IMAGE_FULL_NAME)"
+# OCI运行模板
+OCI_RUN := $(OCI) run --rm --network=host -it -v $(CURDIR)/conf:/app/conf -v $(CURDIR)/Data_$(SF):/app/Data_$(SF) --name $(IMAGE_NAME) $(IMAGE_FULL_NAME)
 
 # 帮助信息
 .PHONY: help
@@ -38,22 +37,10 @@ help:
 build:
 	$(OCI) build -t $(IMAGE_FULL_NAME) .
 
-.PHONY: run
-run:
-	@if [ ! -d $(CURDIR)/Data_$(SF) ]; then \
-			mkdir -p $(CURDIR)/Data_$(SF); \
-	fi
-	$(OCI) run --replace --rm -it -v$(CURDIR)/conf:/app/conf -v $(CURDIR)/Data_$(SF):/app/Data_$(SF) --name $(IMAGE_NAME) $(IMAGE_FULL_NAME) bash || true
-
 # 清理镜像和容器
 .PHONY: clean
 clean: 
 	$(OCI) rmi $(IMAGE_FULL_NAME) || true
-
-# 自定义测试
-test:
-	$(OCI) run --rm --name $(IMAGE_NAME) $(IMAGE_FULL_NAME) \
-		sysbench $(CMD)
 
 # 推送镜像到镜像仓库
 .PHONY: push
@@ -69,51 +56,72 @@ save:
 			rm -rf $(CURDIR)/out/*; \
 	fi
 	$(OCI) image save -o out/$(IMAGE_NAME).tar $(IMAGE_FULL_NAME)
-	zip -7 out/$(IMAGE_NAME).zip out/$(IMAGE_NAME).tar
+	zip out/$(IMAGE_NAME).zip out/$(IMAGE_NAME).tar
 
 # 从文件加载镜像
 .PHONY: load
 load:
-	unzip out/$(IMAGE_NAME).zip out/$(IMAGE_NAME).tar
-	$(OCI) image load -i out/$(IMAGE_NAME).tar
+	unzip -f out/$(IMAGE_NAME).zip out/$(IMAGE_NAME).tar || true
+	$(OCI) image load -i out/$(IMAGE_NAME).tar | grep "Loaded image" |awk '{print $$3}'| xargs -I {} $(OCI) tag {} $(IMAGE_FULL_NAME)
 
 release: save
 	rm -rf out/$(IMAGE_NAME)_$(IMAGE_TAG).zip || true
-	zip -r out/$(IMAGE_NAME)_$(IMAGE_TAG).zip ./* -x ".idea/*" -x "Data_$(SF)/*" "target/*"
+	zip -r out/$(IMAGE_NAME)_$(IMAGE_TAG).zip ./* -x ".idea/*" "Data_$(SF)/*" "target/*" "out/*.zip" "bin/*" "package/*"
+
+# 调试
+debug:
+	@echo "$(IMAGE_FULL_NAME)"
+
+# 前置条件检查
+ensure-pre:
+	@if [ ! -d $(CURDIR)/Data_$(SF) ]; then \
+			mkdir -p $(CURDIR)/Data_$(SF); \
+	fi
+
+.PHONY: run
+run: ensure-pre
+	$(OCI_RUN) bash || true
 
 copy-conf:
 	$(OCI) create --rm -it --name $(IMAGE_NAME) $(IMAGE_FULL_NAME)
 	$(OCI) cp $(IMAGE_NAME):/app/conf/ ./conf
 	$(OCI) rm $(IMAGE_NAME)
 
-oracle-gendata:
-	$(OCI) run --replace --rm -it -v$(CURDIR)/conf:/app/conf -v $(CURDIR)/Data_$(SF):/app/Data_$(SF) --name $(IMAGE_NAME) $(IMAGE_FULL_NAME) \
-		./hybench -c ./conf/oracle/db.props -t gendata ;\
-		./hybench -c ./conf/oracle/db.props -t sql -f ./conf/oracle/ddl_oracle.sql ;
+# 生成测试数据,各数据库通用
+gendata: ensure-pre
+	$(OCI_RUN) \
+		./hybench -c ./conf/db.props -t gendata
 
+oracle-init: 
+	$(OCI_RUN) bash -c \
+		"./hybench -c ./conf/oracle/db.props -t sql -f ./conf/oracle/ddl_oracle.sql &&\
+		./hybench -c ./conf/oracle/db.props -t sql -f ./conf/oracle/create_index_oracle.sql"
+oracle-load:
+	$(OCI_RUN) \
+		./conf/oracle/data_loader/load.sh
 oracle-run:
-	# 创建索引。为了提高导入效率，建议先导入数据再建索引
 	# 开始测试。如果要进行单项测试，参考前文测试步骤
-	$(OCI) run --replace  --network=host --rm -it -v$(CURDIR)/conf:/app/conf -v $(CURDIR)/Data_$(SF):/app/Data_$(SF) --name $(IMAGE_NAME) $(IMAGE_FULL_NAME) \
-		./hybench -c ./conf/oracle/db.props -t sql -f ./conf/oracle/create_index_oracle.sql ;\
+	$(OCI_RUN) \
 		./hybench -c ./conf/oracle/db.props -t runall -f ./conf/oracle/stmt_oracle.toml
-
 oracle-clean:
-	$(OCI) run --replace --rm -it -v$(CURDIR)/conf:/app/conf -v $(CURDIR)/Data_$(SF):/app/Data_$(SF) --name $(IMAGE_NAME) $(IMAGE_FULL_NAME) \
-		./hybench -c ./conf/oracle/db.props -t sql -f ./conf/dropTables.sql
+	$(OCI_RUN) bash -c \
+		"./hybench -c ./conf/oracle/db.props -t sql -f ./conf/dropTables.sql && \
+		 ./hybench -c ./conf/oracle/db.props -t sql -f ./conf/oracle/clean.sql"
+oracle-all: oracle-init oracle-load oracle-run oracle-clean
 
-dm-gendata:
-	$(OCI) run --replace --rm -it -v$(CURDIR)/conf:/app/conf -v $(CURDIR)/Data_$(SF):/app/Data_$(SF) --name $(IMAGE_NAME) $(IMAGE_FULL_NAME) \
-		./hybench -c ./conf/dm/db.props -t gendata ;\
-		./hybench -c ./conf/dm/db.props -t sql -f ./conf/dm/ddl_oracle.sql ;
-
+dm-init: 
+	$(OCI_RUN) bash -c \
+		"./hybench -c ./conf/dm/db.props -t sql -f ./conf/dm/ddl_oracle.sql &&\
+		./hybench -c ./conf/dm/db.props -t sql -f ./conf/dm/create_index_oracle.sql"
+dm-load:
+	$(OCI_RUN) \
+		./conf/dm/data_loader/load.sh
 dm-run:
-	# 创建索引。为了提高导入效率，建议先导入数据再建索引
 	# 开始测试。如果要进行单项测试，参考前文测试步骤
-	$(OCI) run --replace --network=host --rm -it -v$(CURDIR)/conf:/app/conf -v $(CURDIR)/Data_$(SF):/app/Data_$(SF) --name $(IMAGE_NAME) $(IMAGE_FULL_NAME) \
-		./hybench -c ./conf/dm/db.props -t sql -f ./conf/dm/create_index_oracle.sql ;\
+	$(OCI_RUN) \
 		./hybench -c ./conf/dm/db.props -t runall -f ./conf/dm/stmt_oracle.toml
-
 dm-clean:
-	$(OCI) run --replace --rm -it -v$(CURDIR)/conf:/app/conf -v $(CURDIR)/Data_$(SF):/app/Data_$(SF) --name $(IMAGE_NAME) $(IMAGE_FULL_NAME) \
-		./hybench -c ./conf/dm/db.props -t sql -f ./conf/dropTables.sql
+	$(OCI_RUN) bash -c \
+		"./hybench -c ./conf/dm/db.props -t sql -f ./conf/dropTables.sql && \
+		./hybench -c ./conf/dm/db.props -t sql -f ./conf/dm/clean.sql"
+dm-all: adm-init dm-load dm-run dm-clean

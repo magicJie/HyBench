@@ -1,6 +1,6 @@
 load data
-infile '/home/dmdba/Data_1x/customer.csv'
-badfile '/home/dmdba/bad.log'
+infile 'Data_1x/customer.csv'
+badfile 'bad.log'
 into table customer
 fields terminated by ','
 (               custID,

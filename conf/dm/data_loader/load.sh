@@ -1,15 +1,30 @@
-dmfldr userid=hybench/hybench@localhost:5236 control=\'data_loader/checkingaccount_loader.ctl\' log=\'/home/dmdba/loader.log\'
+#!/bin/bash
 
-dmfldr userid=hybench/hybench@localhost:5236 control=\'data_loader/savingaccount_loader.ctl\' log=\'/home/dmdba/loader.log\'
+script_dir=$(dirname "$0")
+# 定义公共参数
+USER_ID="hybench/hyBench_0@dm_server:5236"
+LOG_PATH="${script_dir}/loader.log"
+CTL_BASE_DIR="${script_dir}"
 
-dmfldr userid=hybench/hybench@localhost:5236 control=\'data_loader/checking_loader.ctl\' log=\'/home/dmdba/loader.log\'
+script_dir=$(dirname "$0")
 
-dmfldr userid=hybench/hybench@localhost:5236 control=\'data_loader/customer_loader.ctl\' log=\'/home/dmdba/loader.log\'
+# 需要处理的control文件列表
+CTL_FILES=(
+  "checkingaccount"
+  "savingaccount"
+  "checking"
+  "customer"
+  "company"
+  "transfer"
+  "loanapps"
+  "loantrans"
+)
 
-dmfldr userid=hybench/hybench@localhost:5236 control=\'data_loader/company_loader.ctl\' log=\'/home/dmdba/loader.log\'
-
-dmfldr userid=hybench/hybench@localhost:5236 control=\'data_loader/transfer_loader.ctl\' log=\'/home/dmdba/loader.log\'
-
-dmfldr userid=hybench/hybench@localhost:5236 control=\'data_loader/loanapps_loader.ctl\' log=\'/home/dmdba/loader.log\'
-
-dmfldr userid=hybench/hybench@localhost:5236 control=\'data_loader/loantrans_loader.ctl\' log=\'/home/dmdba/loader.log\'
+# 循环执行命令
+for ctl_file in "${CTL_FILES[@]}"; do
+  ctl_path="${CTL_BASE_DIR}/${ctl_file}_loader.ctl"
+  
+  dmfldr userid=${USER_ID} \
+    control=\'"$ctl_path"\' \
+    log=\'"$LOG_PATH"\'
+done

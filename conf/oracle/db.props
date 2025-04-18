@@ -3,13 +3,13 @@ sf=1x
 db=oracle
 classname=oracle.jdbc.OracleDriver
 username=hybench
-password=hybench
-url=jdbc:oracle:thin:@//192.168.122.1:1521/ORCLPDB1
+password=hyBench_0
+url=jdbc:oracle:thin:@//oracle_server:1521/ORCLPDB1
 
-url_ap=jdbc:oracle:thin:@//192.168.122.1:1521/ORCLPDB1
+url_ap=jdbc:oracle:thin:@//oracle_server:1521/ORCLPDB1
 classname_ap=oracle.jdbc.OracleDriver
 username_ap=hybench
-password_ap=hybench
+password_ap=hyBench_0
 
 at1_percent=35
 at2_percent=25

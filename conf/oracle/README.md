@@ -52,10 +52,10 @@ podman run --name hybench -it -v $pwd/conf:/app/conf -v $pwd/Data_$sf:/app/Data_
 ./hybench -c ./conf/oracle/db.props -t gendata
 
 # 导入数据。由于各种数据库导入数据库的方式不同，所以需要根据不同的数据库进行不同的操作。参考后文导入数据库章节
-# 复制Data_1x到oracle服务/home/oracle/Data_1x,复制conf/oracle/data_loader到oracle服务/home/oracle/data_loader
-# 到oracle服务器上执行/home/oracle/data_loader/load.sh
-cp -r Data_1x /home/oracle/Data_1x
-cp -r conf/oracle/data_loader /home/oracle/data_loader
+# 复制Data_1x到oracle服务Data_1x,复制conf/oracle/data_loader到oracle服务data_loader
+# 到oracle服务器上执行data_loader/load.sh
+cp -r Data_1x Data_1x
+cp -r conf/oracle/data_loader data_loader
 
 # 创建索引。为了提高导入效率，建议先导入数据再建索引
 ./hybench -c ./conf/oracle/db.props -t sql -f ./conf/oracle/create_index_oracle.sql

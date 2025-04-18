@@ -1,6 +1,6 @@
 load data
-infile '/home/dmdba/Data_1x/checkingAccount.csv'
-badfile '/home/dmdba/bad.log'
+infile 'Data_1x/checkingAccount.csv'
+badfile 'bad.log'
 into table checkingaccount
 fields terminated by ','
 (

@@ -1,6 +1,6 @@
 load data
-infile '/home/dmdba/Data_1x/transfer.csv'
-badfile '/home/dmdba/bad.log'
+infile 'Data_1x/transfer.csv'
+badfile 'bad.log'
 into table transfer
 fields terminated by ','
 trailing nullcols

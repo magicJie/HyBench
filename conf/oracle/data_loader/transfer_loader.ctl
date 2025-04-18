@@ -1,6 +1,6 @@
 load data
-infile '/home/oracle/Data_1x/transfer.csv'
-badfile '/home/oracle/bad.log'
+infile 'Data_1x/transfer.csv'
+badfile 'bad.log'
 into table transfer
 fields terminated by ','
 trailing nullcols

@@ -1,6 +1,6 @@
 load data
-infile '/home/dmdba/Data_1x/loanApps.csv'
-badfile '/home/dmdba/bad.log'
+infile 'Data_1x/loanApps.csv'
+badfile 'bad.log'
 into table loanapps
 fields terminated by ','
 (

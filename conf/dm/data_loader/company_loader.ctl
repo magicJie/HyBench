@@ -1,6 +1,6 @@
 load data
-infile '/home/dmdba/Data_1x/company.csv'
-badfile '/home/dmdba/bad.log'
+infile 'Data_1x/company.csv'
+badfile 'bad.log'
 into table company
 fields terminated by ','
 (

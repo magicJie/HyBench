@@ -1,15 +1,28 @@
-sqlldr hybench/hybench@//localhost:1521/orclpdb1 control=data_loader/checkingaccount_loader.ctl log=/home/oracle/loader.log
+#!/bin/bash
 
-sqlldr hybench/hybench@//localhost:1521/orclpdb1 control=data_loader/savingaccount_loader.ctl log=/home/oracle/loader.log
+script_dir=$(dirname "$0")
+# 定义公共参数
+USER_ID="hybench/hyBench_0@oracle_server:1521/orclpdb1"
+LOG_PATH="${script_dir}/loader.log"
+CTL_BASE_DIR="${script_dir}"
 
-sqlldr hybench/hybench@//localhost:1521/orclpdb1 control=data_loader/checking_loader.ctl log=/home/oracle/loader.log
+# 需要处理的control文件列表
+CTL_FILES=(
+  "checkingaccount"
+  "savingaccount"
+  "checking"
+  "customer"
+  "company"
+  "transfer"
+  "loanapps"
+  "loantrans"
+)
 
-sqlldr hybench/hybench@//localhost:1521/orclpdb1 control=data_loader/customer_loader.ctl log=/home/oracle/loader.log
+# 循环执行命令
+for ctl_file in "${CTL_FILES[@]}"; do
+  ctl_path="${CTL_BASE_DIR}/${ctl_file}_loader.ctl"
 
-sqlldr hybench/hybench@//localhost:1521/orclpdb1 control=data_loader/company_loader.ctl log=/home/oracle/loader.log
-
-sqlldr hybench/hybench@//localhost:1521/orclpdb1 control=data_loader/transfer_loader.ctl log=/home/oracle/loader.log
-
-sqlldr hybench/hybench@//localhost:1521/orclpdb1 control=data_loader/loanapps_loader.ctl log=/home/oracle/loader.log
-
-sqlldr hybench/hybench@//localhost:1521/orclpdb1 control=data_loader/loantrans_loader.ctl log=/home/oracle/loader.log
+  sqlldr $USER_ID \
+    control=$ctl_path \
+    log=$LOG_PATH
+done
